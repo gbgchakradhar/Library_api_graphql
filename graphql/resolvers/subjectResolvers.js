@@ -11,7 +11,7 @@ export const subjectResolvers = {
                 throw new Error('Error fetching subjects');
             }
         },
-        subject: async ({ id }) => {
+        subject: async (_, { id }) => {
             try {
                 return await Subject.findById(id);
             } catch (error) {
@@ -20,7 +20,7 @@ export const subjectResolvers = {
             }
         },
 
-        availableBooksBySubject: async ({ subjectId }) => {
+        availableBooksBySubject: async (_, { subjectId }) => {
             try {
                 const subjectDetails = await Subject.findById(subjectId);
                 const booksList = subjectDetails.books;
@@ -51,7 +51,7 @@ export const subjectResolvers = {
     },
 
     Mutation: {
-        addSubject: async ({ subject_name, total_books, frequency }) => {
+        addSubject: async (_, { subject_name, total_books, frequency }) => {
             try {
                 const newSubject = new Subject({ subject_name, total_books, frequency });
                 return await newSubject.save();
@@ -60,7 +60,7 @@ export const subjectResolvers = {
                 throw new Error('Error adding new subject');
             }
         },
-        updateSubject: async ({ id, subject_name, total_books, frequency }) => {
+        updateSubject: async (_, { id, subject_name, total_books, frequency }) => {
             try {
                 const updatedSubject = await Subject.findByIdAndUpdate(
                     id,
@@ -73,7 +73,7 @@ export const subjectResolvers = {
                 throw new Error('Error updating subject');
             }
         },
-        deleteSubject: async ({ id }) => {
+        deleteSubject: async (_, { id }) => {
             try {
                 await Subject.findByIdAndDelete(id);
                 return "Subject has been deleted.";

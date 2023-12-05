@@ -10,7 +10,7 @@ export const staffResolvers = {
                 throw new Error('Error fetching staff');
             }
         },
-        getStaff: async ({ id }) => {
+        getStaff: async (_, { id }) => {
             try {
                 return await Staff.findById(id);
             } catch (error) {
@@ -20,7 +20,7 @@ export const staffResolvers = {
         },
     },
     Mutation: {
-        addStaff: async ({ name, age, gender, current_branch, role }) => {
+        addStaff: async (_, { name, age, gender, current_branch, role }) => {
             try {
                 const newStaff = new Staff({ name, age, gender, current_branch, role });
                 return await newStaff.save();
@@ -29,7 +29,7 @@ export const staffResolvers = {
                 throw new Error('Error adding new staff');
             }
         },
-        updateStaff: async ({ id, name, age, gender, current_branch, role }) => {
+        updateStaff: async (_, { id, name, age, gender, current_branch, role }) => {
             try {
                 const updatedStaff = await Staff.findByIdAndUpdate(
                     id,
@@ -42,7 +42,7 @@ export const staffResolvers = {
                 throw new Error('Error updating staff');
             }
         },
-        deleteStaff: async ({ id }) => {
+        deleteStaff: async (_, { id }) => {
             try {
                 await Staff.findByIdAndDelete(id);
                 return "Staff has been deleted.";

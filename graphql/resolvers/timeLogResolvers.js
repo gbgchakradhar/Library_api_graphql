@@ -11,7 +11,7 @@ export const timeLogResolvers = {
                 throw new Error('Error fetching time logs');
             }
         },
-        timeLog: async ({ id }) => {
+        timeLog: async (_, { id }) => {
             try {
                 return await Time.findById(id);
             } catch (error) {
@@ -21,7 +21,7 @@ export const timeLogResolvers = {
         },
     },
     Mutation: {
-        logInTime: async ({ designation, Id, branch, date, in_time }) => {
+        logInTime: async (_, { designation, Id, branch, date, in_time }) => {
             try {
                 const newLog = new Time({ designation, Id, branch, date, in_time });
                 return await newLog.save();
@@ -30,7 +30,7 @@ export const timeLogResolvers = {
                 throw new Error('Error logging in time');
             }
         },
-        logOutTime: async ({ Id, designation, out_time }) => {
+        logOutTime: async (_, { Id, designation, out_time }) => {
             try {
                 const updatedLog = await Time.findOneAndUpdate(
                     { Id, designation },

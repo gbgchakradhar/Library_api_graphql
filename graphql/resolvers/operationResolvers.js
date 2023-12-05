@@ -5,7 +5,7 @@ import Subject from "../../models/subject.js";
 
 export const peopleCountResolver = {
     Query: {
-        peopleCountInLibrary: async ({ from_time, to_time, branch, date }) => {
+        peopleCountInLibrary: async (_, { from_time, to_time, branch, date }) => {
             const fromTime = new Date(`${date}T${from_time}Z`);
             const toTime = new Date(`${date}T${to_time}Z`);
 
@@ -44,7 +44,7 @@ export const peopleCountResolver = {
 
 export const availBookResolver = {
     Mutation: {
-        borrowBook: async ({ bookId }) => {
+        borrowBook: async (_, { bookId }) => {
             try {
                 const result = await Book.findOne({ "bookId": bookId });
 

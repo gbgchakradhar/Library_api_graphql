@@ -11,7 +11,7 @@ export const studentResolvers = {
                 throw new Error('Error fetching students');
             }
         },
-        student: async ({ id }) => {
+        student: async (_, { id }) => {
             try {
                 return await Student.findById(id);
             } catch (error) {
@@ -21,7 +21,7 @@ export const studentResolvers = {
         },
     },
     Mutation: {
-        addStudent: async ({ name, age, gender }) => {
+        addStudent: async (_, { name, age, gender }) => {
             try {
                 const newStudent = new Student({ name, age, gender });
                 return await newStudent.save();
@@ -30,7 +30,7 @@ export const studentResolvers = {
                 throw new Error('Error adding new student');
             }
         },
-        updateStudent: async ({ id, name, age, gender }) => {
+        updateStudent: async (_, { id, name, age, gender }) => {
             try {
                 const updatedStudent = await Student.findByIdAndUpdate(
                     id,
@@ -43,7 +43,7 @@ export const studentResolvers = {
                 throw new Error('Error updating student');
             }
         },
-        deleteStudent: async ({ id }) => {
+        deleteStudent: async (_, { id }) => {
             try {
                 await Student.findByIdAndDelete(id);
                 return "Student has been deleted.";

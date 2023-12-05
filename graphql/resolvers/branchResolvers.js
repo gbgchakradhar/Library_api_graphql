@@ -11,7 +11,7 @@ export const branchResolvers = {
                 throw new Error('Error fetching branches');
             }
         },
-        branch: async ({ id }) => {
+        branch: async (_, { id }) => {
             try {
                 return await Branch.findById(id);
             } catch (error) {
@@ -21,7 +21,7 @@ export const branchResolvers = {
         },
     },
     Mutation: {
-        addBranch: async ({ branchId, location, capacity }) => {
+        addBranch: async (_, { branchId, location, capacity }) => {
             try {
                 const newBranch = new Branch({ branchId, location, capacity });
                 return await newBranch.save();
@@ -30,7 +30,7 @@ export const branchResolvers = {
                 throw new Error('Error adding new branch');
             }
         },
-        updateBranch: async ({ id, location, capacity }) => {
+        updateBranch: async (_, { id, location, capacity }) => {
             try {
                 const updatedBranch = await Branch.findByIdAndUpdate(
                     id,
@@ -43,7 +43,7 @@ export const branchResolvers = {
                 throw new Error('Error updating branch');
             }
         },
-        deleteBranch: async ({ id }) => {
+        deleteBranch: async (_, { id }) => {
             try {
                 await Branch.findByIdAndDelete(id);
                 return "Branch has been deleted.";

@@ -10,7 +10,7 @@ export const bookResolvers = {
                 throw new Error('Error fetching books');
             }
         },
-        book: async ({ id }) => {
+        book: async (_, { id }) => {
             try {
                 return await Book.findById(id);
             } catch (error) {
@@ -20,20 +20,20 @@ export const bookResolvers = {
         },
     },
     Mutation: {
-        addBook: async ({ bookId, name, total_copies, available_copies, subjects }) => {
+        addBook: async (_, { bookId, name, total_copies, available_copies, subject }) => {
             try {
-                const newBook = new Book({ bookId, name, total_copies, available_copies, subjects });
+                const newBook = new Book({ bookId, name, total_copies, available_copies, subject });
                 return await newBook.save();
             } catch (error) {
                 console.error(error);
                 throw new Error('Error adding new book');
             }
         },
-        updateBook: async ({ id, name, total_copies, available_copies, subjects }) => {
+        updateBook: async (_, { id, bookId, name, total_copies, available_copies, subject }) => {
             try {
                 const updatedBook = await Book.findByIdAndUpdate(
                     id,
-                    { $set: { name, total_copies, available_copies, subjects } },
+                    { $set: { bookId, name, total_copies, available_copies, subject } },
                     { new: true }
                 );
                 return updatedBook;
@@ -42,7 +42,7 @@ export const bookResolvers = {
                 throw new Error('Error updating book');
             }
         },
-        deleteBook: async ({ id }) => {
+        deleteBook: async (_, { id }) => {
             try {
                 await Book.findByIdAndDelete(id);
                 return "Book has been deleted.";
