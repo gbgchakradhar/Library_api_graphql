@@ -19,34 +19,35 @@ export const subjectResolvers = {
                 throw new Error('Error fetching subject by ID');
             }
         },
-    },
-    availableBooksBySubject: async ({ subjectId }) => {
-        try {
-            const subjectDetails = await Subject.findById(subjectId);
-            const booksList = subjectDetails.books;
 
-            const availableBooks = [];
+        availableBooksBySubject: async ({ subjectId }) => {
+            try {
+                const subjectDetails = await Subject.findById(subjectId);
+                const booksList = subjectDetails.books;
 
-            for (const bookItem of booksList) {
-                const bookDetails = await Book.findOne({ "bookId": bookItem.bookId });
-                if (bookDetails.available_copies >= 1) {
-                    availableBooks.push(bookDetails);
+                const availableBooks = [];
+
+                for (const bookItem of booksList) {
+                    const bookDetails = await Book.findOne({ "bookId": bookItem.bookId });
+                    if (bookDetails.available_copies >= 1) {
+                        availableBooks.push(bookDetails);
+                    }
                 }
-            }
 
-            return availableBooks;
-        } catch (error) {
-            console.error(error);
-            throw new Error('Error fetching available books by subject');
-        }
-    },
-    mostReadSubjects: async () => {
-        try {
-            return await Subject.find().sort({ "frequency": -1 }).limit(3);
-        } catch (error) {
-            console.error(error);
-            throw new Error('Error fetching most read subjects');
-        }
+                return availableBooks;
+            } catch (error) {
+                console.error(error);
+                throw new Error('Error fetching available books by subject');
+            }
+        },
+        mostReadSubjects: async () => {
+            try {
+                return await Subject.find().sort({ "frequency": -1 }).limit(3);
+            } catch (error) {
+                console.error(error);
+                throw new Error('Error fetching most read subjects');
+            }
+        },
     },
 
     Mutation: {

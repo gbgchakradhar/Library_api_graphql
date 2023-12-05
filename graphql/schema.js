@@ -118,13 +118,11 @@ export const typeDefs = `#graphql
     students: [Student]
     student(id: ID!): Student
 
-    availedBooks: [AvailedBooks]
-    availedBook(id: ID!): AvailedBooks
-
     subjects: [Subject]
     subject(id: ID!): Subject
-    availableBooksBySubject(subjectId:String!):[Book]
-    mostReadSubjects():[Subject]
+
+    availableBooksBySubject(subjectId: String!): [Book]
+    mostReadSubjects:[Subject]
 
     timeLogs: [Time]
     timeLog(id: ID!): Time
