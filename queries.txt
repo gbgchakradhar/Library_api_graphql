@@ -1,0 +1,58 @@
+//addbook
+mutation {
+  addBook(
+    bookId: "1234"
+    name: "The  Gatsby"
+    total_copies: 5
+    available_copies: 3
+    subject: [
+      { subject_name: "Fiction" },
+      { subject_name: "Classic" }
+    ]
+  ) {
+    id
+    bookId
+    name
+    total_copies
+    available_copies
+    subject {
+      id
+      subject_name
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+
+//update book
+mutation {
+  updateBook(
+    id: "656f5fac94c5153f291268e7"  # Replace with the actual ID of the book you want to update
+    name: "Updated Title"
+    bookId:"1245"
+    total_copies: 8
+    available_copies: 6
+    subject: [
+      { subject_name: "Updated Genre 1" },
+      { subject_name: "Updated Genre 2" }
+    ]
+  ) {
+    id
+    bookId
+    name
+    total_copies
+    available_copies
+    subject {
+      id
+      subject_name
+    }
+    createdAt
+    updatedAt
+  }
+}
+//delete book
+
+mutation {
+  deleteBook(id: "656f5fac94c5153f291268e7")  # Replace with the actual ID of the book you want to delete
+}

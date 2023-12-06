@@ -30,10 +30,10 @@ export const timeLogResolvers = {
                 throw new Error('Error logging in time');
             }
         },
-        logOutTime: async (_, { Id, designation, out_time }) => {
+        logOutTime: async (_, { Id, date, out_time }) => {
             try {
                 const updatedLog = await Time.findOneAndUpdate(
-                    { Id, designation },
+                    { Id, date },
                     { $set: { out_time } },
                     { new: true }
                 );

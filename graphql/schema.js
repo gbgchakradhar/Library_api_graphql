@@ -16,6 +16,10 @@ export const typeDefs = `#graphql
     subject_name:String!
   }
 
+  input SubjectNameInput {
+  subject_name: String!
+  }
+
   type Branch{
     id:ID!
     branchId:String!
@@ -31,10 +35,19 @@ export const typeDefs = `#graphql
     subjects:[SubjectName!]!
   }
 
+  input BookSummaryInput{
+    bookId:String! 
+    subjects:[SubjectNameInput!]!
+  }
+
   type StaffSummary{
     id:ID!
     staffId:String!
   }
+
+input StaffSummaryInput{
+  staffId:String!
+}
 
   type Staff{
     id:ID!
@@ -58,7 +71,6 @@ export const typeDefs = `#graphql
     createdAt: String!
     updatedAt: String!
   }
-
   type AvailedBooks{
     id:ID! 
     bookId:String! 
@@ -68,7 +80,14 @@ export const typeDefs = `#graphql
     availed_time:String! 
     return_time:String! 
   }
-
+  input AvailedBooksInput{
+    bookId:String!
+    branchId:String!
+    availed_date:String!
+    return_date:String!
+    availed_time:String!
+    return_time:String!
+  }
   type Subject{
     id:ID! 
     subjectId:String! 
@@ -82,7 +101,9 @@ export const typeDefs = `#graphql
     id:ID! 
     bookId:String! 
   }
-
+  input BookListInput{
+    bookId:String!
+  }
   type Time{
     id:ID! 
     designation:String! 
@@ -100,10 +121,12 @@ export const typeDefs = `#graphql
 
   type BorrowBook{
     id:ID! 
-    bookId:String! 
+    bookId:String!  
     name:String! 
     available_copies:Int!
   }
+
+  
 
   type Query {
     books: [Book]
@@ -134,36 +157,36 @@ export const typeDefs = `#graphql
 
   type Mutation {
 # book
-  addBook(bookId: String!, name: String!, total_copies: Int!, available_copies: Int, subjects: [String!]!): Book
-  updateBook(id: ID!, name: String, total_copies: Int, available_copies: Int, subjects: [String!]): Book
+  addBook(bookId: String!, name: String!, total_copies: Int!, available_copies: Int!, subject: [SubjectNameInput!]!): Book
+  updateBook(id: ID!, bookId:String!,name: String, total_copies: Int, available_copies: Int, subject: [SubjectNameInput!]): Book
   deleteBook(id: ID!): String
 # branch
-  addBranch(branchId: String!, location: String!, capacity: String!): Branch
-  updateBranch(id: ID!, location: String, capacity: String): Branch
+  addBranch(branchId: String!, location: String!, capacity: String!,book:[BookSummaryInput!]!,staff:[StaffSummaryInput!]!): Branch
+  updateBranch(id: ID!,branchId: String, location: String, capacity: String,book:[BookSummaryInput],staff:[StaffSummaryInput]): Branch
   deleteBranch(id: ID!): String
 
 #staff
-  addStaff(name: String!, age: String!, gender: Int!, current_branch: String!, role: String!): Staff
-  updateStaff(id: ID!, name: String, age: String, gender: Int, current_branch: String, role: String): Staff
+  addStaff(staffId:String!,name:String!,age:String!,gender:Int!,current_branch:String!,role:String!): Staff
+  updateStaff(id: ID!, staffId:String,name:String,age:String,gender:Int,current_branch:String,role:String): Staff
   deleteStaff(id: ID!): String
 
 #student
-  addStudent(name: String!, age: Int!, gender: Int!): Student
-  updateStudent(id: ID!, name: String, age: Int, gender: Int): Student
+  addStudent(studentId:String!,name:String!,age:Int!,gender:Int!,books_availed:[AvailedBooksInput!]!): Student
+  updateStudent(id: ID!, studentId:String,name:String,age:Int,gender:Int,books_availed:[AvailedBooksInput!]): Student
   deleteStudent(id: ID!): String
 
 #subject
-  addSubject(subject_name: String!, total_books: Int!, frequency: Int!): Subject
-  updateSubject(id: ID!, subject_name: String, total_books: Int, frequency: Int): Subject
+  addSubject( subjectId:String! ,subject_name: String!, total_books: Int!, frequency: Int!,books:[BookListInput!]! ): Subject
+  updateSubject(id: ID!, subjectId:String ,subject_name: String, total_books: Int, frequency: Int,books:[BookListInput!] ): Subject
   deleteSubject(id: ID!): String
 
   
 #time
   logInTime(designation: String!, Id: String!, branch: String!, date: String!, in_time: String!): Time
-  logOutTime(Id: String!, designation: String!, out_time: String!): Time
+  logOutTime(Id: String!, date: String!, out_time: String!): Time
   
 #borrow book
-  borrowBook(bookId: ID!): BorrowBook
+  borrowBook(bookId: String!): BorrowBook
 
 
 }

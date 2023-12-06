@@ -21,20 +21,20 @@ export const studentResolvers = {
         },
     },
     Mutation: {
-        addStudent: async (_, { name, age, gender }) => {
+        addStudent: async (_, { studentId, name, age, gender, books_availed }) => {
             try {
-                const newStudent = new Student({ name, age, gender });
+                const newStudent = new Student({ studentId, name, age, gender, books_availed });
                 return await newStudent.save();
             } catch (error) {
                 console.error(error);
                 throw new Error('Error adding new student');
             }
         },
-        updateStudent: async (_, { id, name, age, gender }) => {
+        updateStudent: async (_, { id, studentId, name, age, gender, books_availed }) => {
             try {
                 const updatedStudent = await Student.findByIdAndUpdate(
                     id,
-                    { $set: { name, age, gender } },
+                    { $set: { studentId, name, age, gender, books_availed } },
                     { new: true }
                 );
                 return updatedStudent;

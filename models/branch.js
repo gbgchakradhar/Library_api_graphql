@@ -8,9 +8,9 @@ const branchSchema = new mongoose.Schema(
         book: [
             {
                 bookId: { type: String, required: true },
-                subjects: [
-                    { type: String, required: true }
-                ],
+                subjects: [{
+                    subject_name: { type: String, required: true }
+                },],
             }
 
         ],

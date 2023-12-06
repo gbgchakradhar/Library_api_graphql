@@ -51,20 +51,20 @@ export const subjectResolvers = {
     },
 
     Mutation: {
-        addSubject: async (_, { subject_name, total_books, frequency }) => {
+        addSubject: async (_, { subjectId, subject_name, total_books, frequency, books }) => {
             try {
-                const newSubject = new Subject({ subject_name, total_books, frequency });
+                const newSubject = new Subject({ subjectId, subject_name, total_books, frequency, books });
                 return await newSubject.save();
             } catch (error) {
                 console.error(error);
                 throw new Error('Error adding new subject');
             }
         },
-        updateSubject: async (_, { id, subject_name, total_books, frequency }) => {
+        updateSubject: async (_, { id, subjectId, subject_name, total_books, frequency, books }) => {
             try {
                 const updatedSubject = await Subject.findByIdAndUpdate(
                     id,
-                    { $set: { subject_name, total_books, frequency } },
+                    { $set: { subjectId, subject_name, total_books, frequency, books } },
                     { new: true }
                 );
                 return updatedSubject;

@@ -20,20 +20,20 @@ export const staffResolvers = {
         },
     },
     Mutation: {
-        addStaff: async (_, { name, age, gender, current_branch, role }) => {
+        addStaff: async (_, { staffId, name, age, gender, current_branch, role }) => {
             try {
-                const newStaff = new Staff({ name, age, gender, current_branch, role });
+                const newStaff = new Staff({ staffId, name, age, gender, current_branch, role });
                 return await newStaff.save();
             } catch (error) {
                 console.error(error);
                 throw new Error('Error adding new staff');
             }
         },
-        updateStaff: async (_, { id, name, age, gender, current_branch, role }) => {
+        updateStaff: async (_, { id, staffId, name, age, gender, current_branch, role }) => {
             try {
                 const updatedStaff = await Staff.findByIdAndUpdate(
                     id,
-                    { $set: { name, age, gender, current_branch, role } },
+                    { $set: { staffId, name, age, gender, current_branch, role } },
                     { new: true }
                 );
                 return updatedStaff;

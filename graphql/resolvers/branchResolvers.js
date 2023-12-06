@@ -21,20 +21,20 @@ export const branchResolvers = {
         },
     },
     Mutation: {
-        addBranch: async (_, { branchId, location, capacity }) => {
+        addBranch: async (_, { branchId, location, capacity, book, staff }) => {
             try {
-                const newBranch = new Branch({ branchId, location, capacity });
+                const newBranch = new Branch({ branchId, location, capacity, book, staff });
                 return await newBranch.save();
             } catch (error) {
                 console.error(error);
                 throw new Error('Error adding new branch');
             }
         },
-        updateBranch: async (_, { id, location, capacity }) => {
+        updateBranch: async (_, { id, branchId, location, capacity, book, staff }) => {
             try {
                 const updatedBranch = await Branch.findByIdAndUpdate(
                     id,
-                    { $set: { location, capacity } },
+                    { $set: { branchId, location, capacity, book, staff } },
                     { new: true }
                 );
                 return updatedBranch;
