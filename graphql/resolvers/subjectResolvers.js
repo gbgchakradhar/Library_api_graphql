@@ -1,9 +1,12 @@
 import Subject from "../../models/subject.js";
+import { authorize } from "../../middleware/authorize.js"
 
 
 export const subjectResolvers = {
     Query: {
         subjects: async () => {
+
+
             try {
                 return await Subject.find();
             } catch (error) {
@@ -12,6 +15,7 @@ export const subjectResolvers = {
             }
         },
         subject: async (_, { id }) => {
+
             try {
                 return await Subject.findById(id);
             } catch (error) {
@@ -40,7 +44,9 @@ export const subjectResolvers = {
                 throw new Error('Error fetching available books by subject');
             }
         },
-        mostReadSubjects: async () => {
+        mostReadSubjects: async (context) => {
+            await authorize(context, ['Head admin', 'Branch admin', 'Librarian'])
+
             try {
                 return await Subject.find().sort({ "frequency": -1 }).limit(3);
             } catch (error) {
@@ -51,7 +57,9 @@ export const subjectResolvers = {
     },
 
     Mutation: {
-        addSubject: async (_, { subjectId, subject_name, total_books, frequency, books }) => {
+        addSubject: async (_, { subjectId, subject_name, total_books, frequency, books }, context) => {
+            await authorize(context, ['Head admin', 'Branch admin', 'Librarian'])
+
             try {
                 const newSubject = new Subject({ subjectId, subject_name, total_books, frequency, books });
                 return await newSubject.save();
@@ -60,7 +68,9 @@ export const subjectResolvers = {
                 throw new Error('Error adding new subject');
             }
         },
-        updateSubject: async (_, { id, subjectId, subject_name, total_books, frequency, books }) => {
+        updateSubject: async (_, { id, subjectId, subject_name, total_books, frequency, books }, context) => {
+            await authorize(context, ['Head admin', 'Branch admin', 'Librarian'])
+
             try {
                 const updatedSubject = await Subject.findByIdAndUpdate(
                     id,
@@ -73,7 +83,9 @@ export const subjectResolvers = {
                 throw new Error('Error updating subject');
             }
         },
-        deleteSubject: async (_, { id }) => {
+        deleteSubject: async (_, { id }, context) => {
+            await authorize(context, ['Head admin', 'Branch admin', 'Librarian'])
+
             try {
                 await Subject.findByIdAndDelete(id);
                 return "Subject has been deleted.";

@@ -1,5 +1,6 @@
 
 import Branch from "../../models/branch.js";
+import { authorize } from "../../middleware/authorize.js"
 
 export const branchResolvers = {
     Query: {
@@ -21,8 +22,10 @@ export const branchResolvers = {
         },
     },
     Mutation: {
-        addBranch: async (_, { branchId, location, capacity, book, staff }) => {
+        addBranch: async (_, { branchId, location, capacity, book, staff }, context) => {
             try {
+                await authorize(context, ['Head admin'])
+
                 const newBranch = new Branch({ branchId, location, capacity, book, staff });
                 return await newBranch.save();
             } catch (error) {
@@ -30,8 +33,10 @@ export const branchResolvers = {
                 throw new Error('Error adding new branch');
             }
         },
-        updateBranch: async (_, { id, branchId, location, capacity, book, staff }) => {
+        updateBranch: async (_, { id, branchId, location, capacity, book, staff }, context) => {
             try {
+                await authorize(context, ['Head admin', 'Branch admin'])
+
                 const updatedBranch = await Branch.findByIdAndUpdate(
                     id,
                     { $set: { branchId, location, capacity, book, staff } },
@@ -43,8 +48,10 @@ export const branchResolvers = {
                 throw new Error('Error updating branch');
             }
         },
-        deleteBranch: async (_, { id }) => {
+        deleteBranch: async (_, { id }, context) => {
             try {
+                await authorize(context, ['Head admin'])
+
                 await Branch.findByIdAndDelete(id);
                 return "Branch has been deleted.";
             } catch (error) {

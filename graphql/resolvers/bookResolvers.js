@@ -1,5 +1,5 @@
 import Book from "../../models/book.js";
-
+import { authorize } from "../../middleware/authorize.js"
 export const bookResolvers = {
     Query: {
         books: async () => {
@@ -20,17 +20,22 @@ export const bookResolvers = {
         },
     },
     Mutation: {
-        addBook: async (_, { bookId, name, total_copies, available_copies, subject }) => {
+        addBook: async (_, { bookId, name, total_copies, available_copies, subject }, context) => {
+            // console.log(context);
             try {
+                await authorize(context, ['Head admin', 'Branch admin'])
                 const newBook = new Book({ bookId, name, total_copies, available_copies, subject });
-                return await newBook.save();
+                const savedBook = await newBook.save();
+                return savedBook
             } catch (error) {
-                console.error(error);
+                console.error(error.message);
                 throw new Error('Error adding new book');
             }
         },
-        updateBook: async (_, { id, bookId, name, total_copies, available_copies, subject }) => {
+        updateBook: async (_, { id, bookId, name, total_copies, available_copies, subject }, context) => {
             try {
+                await authorize(context, ['Head admin', 'Branch admin'])
+
                 const updatedBook = await Book.findByIdAndUpdate(
                     id,
                     { $set: { bookId, name, total_copies, available_copies, subject } },
@@ -42,8 +47,10 @@ export const bookResolvers = {
                 throw new Error('Error updating book');
             }
         },
-        deleteBook: async (_, { id }) => {
+        deleteBook: async (_, { id }, context) => {
             try {
+                await authorize(context, ['Head admin', 'Branch admin'])
+
                 await Book.findByIdAndDelete(id);
                 return "Book has been deleted.";
             } catch (error) {

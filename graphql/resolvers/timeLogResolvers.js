@@ -1,9 +1,12 @@
 import Time from "../../models/timeLog.js";
+import { authorize } from "../../middleware/authorize.js"
 
 
 export const timeLogResolvers = {
     Query: {
-        timeLogs: async () => {
+        timeLogs: async (context) => {
+            await authorize(context, ['Head admin', 'Branch admin', 'Librarian'])
+
             try {
                 return await Time.find();
             } catch (error) {
@@ -11,7 +14,9 @@ export const timeLogResolvers = {
                 throw new Error('Error fetching time logs');
             }
         },
-        timeLog: async (_, { id }) => {
+        timeLog: async (_, { id }, context) => {
+            await authorize(context, ['Head admin', 'Branch admin', 'Librarian'])
+
             try {
                 return await Time.findById(id);
             } catch (error) {

@@ -1,8 +1,11 @@
 import Staff from "../../models/staff.js";
+import { authorize } from "../../middleware/authorize.js"
 
 export const staffResolvers = {
     Query: {
-        staff: async () => {
+        staff: async (context) => {
+            await authorize(context, ['Head admin', 'Branch admin'])
+
             try {
                 return await Staff.find();
             } catch (error) {
@@ -10,7 +13,9 @@ export const staffResolvers = {
                 throw new Error('Error fetching staff');
             }
         },
-        getStaff: async (_, { id }) => {
+        getStaff: async (_, { id }, context) => {
+            await authorize(context, ['Head admin', 'Branch admin'])
+
             try {
                 return await Staff.findById(id);
             } catch (error) {
@@ -20,7 +25,9 @@ export const staffResolvers = {
         },
     },
     Mutation: {
-        addStaff: async (_, { staffId, name, age, gender, current_branch, role }) => {
+        addStaff: async (_, { staffId, name, age, gender, current_branch, role }, context) => {
+            await authorize(context, ['Head admin', 'Branch admin'])
+
             try {
                 const newStaff = new Staff({ staffId, name, age, gender, current_branch, role });
                 return await newStaff.save();
@@ -29,7 +36,9 @@ export const staffResolvers = {
                 throw new Error('Error adding new staff');
             }
         },
-        updateStaff: async (_, { id, staffId, name, age, gender, current_branch, role }) => {
+        updateStaff: async (_, { id, staffId, name, age, gender, current_branch, role }, context) => {
+            await authorize(context, ['Head admin', 'Branch admin'])
+
             try {
                 const updatedStaff = await Staff.findByIdAndUpdate(
                     id,
@@ -42,7 +51,9 @@ export const staffResolvers = {
                 throw new Error('Error updating staff');
             }
         },
-        deleteStaff: async (_, { id }) => {
+        deleteStaff: async (_, { id }, context) => {
+            await authorize(context, ['Head admin', 'Branch admin'])
+
             try {
                 await Staff.findByIdAndDelete(id);
                 return "Staff has been deleted.";

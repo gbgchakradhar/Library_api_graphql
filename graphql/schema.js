@@ -54,7 +54,7 @@ input StaffSummaryInput{
     staffId:String!
     name:String! 
     age:String! 
-    gender:Int! 
+    gender:String! 
     current_branch:String! 
     role:String! 
     createdAt: String!
@@ -66,7 +66,7 @@ input StaffSummaryInput{
     studentId:String! 
     name:String! 
     age:Int! 
-    gender:Int! 
+    gender:String! 
     books_availed:[AvailedBooks!]!
     createdAt: String!
     updatedAt: String!
@@ -125,8 +125,23 @@ input StaffSummaryInput{
     name:String! 
     available_copies:Int!
   }
-
-  
+  type User {
+    id: ID!
+    email: String!
+    password: String
+    name: String!
+    username: String!
+    role: String!
+    branch: String
+  }
+  # type AuthPayLoad{
+  #   token:String!
+  #   user:[User]!
+  # }
+    type Login{
+     
+      token:String! 
+    }
 
   type Query {
     books: [Book]
@@ -153,12 +168,13 @@ input StaffSummaryInput{
     #people count in library
     peopleCountInLibrary(from_time:String!,to_time:String!,branch:String!,date:String!):PeopleCount
 
+
   }
 
   type Mutation {
 # book
   addBook(bookId: String!, name: String!, total_copies: Int!, available_copies: Int!, subject: [SubjectNameInput!]!): Book
-  updateBook(id: ID!, bookId:String!,name: String, total_copies: Int, available_copies: Int, subject: [SubjectNameInput!]): Book
+  updateBook(id: ID!, bookId:String,name: String, total_copies: Int, available_copies: Int, subject: [SubjectNameInput!]): Book
   deleteBook(id: ID!): String
 # branch
   addBranch(branchId: String!, location: String!, capacity: String!,book:[BookSummaryInput!]!,staff:[StaffSummaryInput!]!): Branch
@@ -166,13 +182,13 @@ input StaffSummaryInput{
   deleteBranch(id: ID!): String
 
 #staff
-  addStaff(staffId:String!,name:String!,age:String!,gender:Int!,current_branch:String!,role:String!): Staff
-  updateStaff(id: ID!, staffId:String,name:String,age:String,gender:Int,current_branch:String,role:String): Staff
+  addStaff(staffId:String!,name:String!,age:String!,gender:String!,current_branch:String!,role:String!): Staff
+  updateStaff(id: ID!, staffId:String,name:String,age:String,gender:String,current_branch:String,role:String): Staff
   deleteStaff(id: ID!): String
 
 #student
-  addStudent(studentId:String!,name:String!,age:Int!,gender:Int!,books_availed:[AvailedBooksInput!]!): Student
-  updateStudent(id: ID!, studentId:String,name:String,age:Int,gender:Int,books_availed:[AvailedBooksInput!]): Student
+  addStudent(studentId:String!,name:String!,age:Int!,gender:String!,books_availed:[AvailedBooksInput!]!): Student
+  updateStudent(id: ID!, studentId:String,name:String,age:Int,gender:String,books_availed:[AvailedBooksInput!]): Student
   deleteStudent(id: ID!): String
 
 #subject
@@ -188,6 +204,9 @@ input StaffSummaryInput{
 #borrow book
   borrowBook(bookId: String!): BorrowBook
 
+  Login(email:String! , password:String!):Login
+
+  Register(email:String!,password:String!,name:String!,username:String!,role:String!,branch:String!):String
 
 }
 

@@ -1,11 +1,13 @@
-
 import Time from "../../models/timeLog.js";
 import Book from "../../models/book.js";
 import Subject from "../../models/subject.js";
+import { authorize } from "../../middleware/authorize.js"
 
 export const peopleCountResolver = {
     Query: {
-        peopleCountInLibrary: async (_, { from_time, to_time, branch, date }) => {
+        peopleCountInLibrary: async (_, { from_time, to_time, branch, date }, context) => {
+            await authorize(context, ['Head admin', 'Branch admin', 'Librarian'])
+
             const fromTime = new Date(`${date}T${from_time}Z`);
             const toTime = new Date(`${date}T${to_time}Z`);
 
@@ -44,8 +46,10 @@ export const peopleCountResolver = {
 
 export const availBookResolver = {
     Mutation: {
-        borrowBook: async (_, { bookId }) => {
+        borrowBook: async (_, { bookId }, context) => {
             try {
+                await authorize(context, ['Head admin', 'Branch admin', 'Librarian', 'Student'])
+
                 const result = await Book.findOne({ "bookId": bookId });
 
                 if (!result) {
